@@ -36,6 +36,22 @@ public class OcorrenciaResource {
 		Ocorrencia ocorrencia = service.find(id);
 		return ResponseEntity.ok().body(ocorrencia);
 	}
+
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<Ocorrencia>> findAll() {
+		List<Ocorrencia> lista = service.findAll();
+		return ResponseEntity.ok().body(lista);
+	}
+	
+	@RequestMapping(value="/page", method=RequestMethod.GET)
+	public ResponseEntity<Page<Ocorrencia>> findPage(
+			@RequestParam(value="page", defaultValue="0") Integer page,
+			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage,
+			@RequestParam(value="orderBy", defaultValue="numeroOcorrencia") String orderBy,
+			@RequestParam(value="direction", defaultValue="ASC") String direction) {
+		Page<Ocorrencia> pagina = service.findPage(page, linesPerPage, orderBy, direction);
+		return ResponseEntity.ok().body(pagina);
+	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody Ocorrencia ocorrencia) {
@@ -58,21 +74,5 @@ public class OcorrenciaResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.deleteById(id);
 		return ResponseEntity.noContent().build();
-	}
-	
-	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<Ocorrencia>> findAll() {
-		List<Ocorrencia> lista = service.findAll();
-		return ResponseEntity.ok().body(lista);
-	}
-	
-	@RequestMapping(value="/page", method=RequestMethod.GET)
-	public ResponseEntity<Page<Ocorrencia>> findPage(
-			@RequestParam(value="page", defaultValue="0") Integer page,
-			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage,
-			@RequestParam(value="orderBy", defaultValue="numeroOcorrencia") String orderBy,
-			@RequestParam(value="direction", defaultValue="ASC") String direction) {
-		Page<Ocorrencia> pagina = service.findPage(page, linesPerPage, orderBy, direction);
-		return ResponseEntity.ok().body(pagina);
 	}
 }

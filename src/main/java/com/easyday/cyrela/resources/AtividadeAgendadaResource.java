@@ -32,6 +32,22 @@ public class AtividadeAgendadaResource {
 		return ResponseEntity.ok().body(atividadeAgendada);
 	}
 	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<AtividadeAgendada>> findAll() {
+		List<AtividadeAgendada> lista = service.findAll();
+		return ResponseEntity.ok().body(lista);
+	}
+	
+	@RequestMapping(value="/page", method=RequestMethod.GET)
+	public ResponseEntity<Page<AtividadeAgendada>> findPage(
+			@RequestParam(value="page", defaultValue="0") Integer page,
+			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage,
+			@RequestParam(value="orderBy", defaultValue="id") String orderBy,
+			@RequestParam(value="direction", defaultValue="ASC") String direction) {
+		Page<AtividadeAgendada> pagina = service.findPage(page, linesPerPage, orderBy, direction);
+		return ResponseEntity.ok().body(pagina);
+	}
+	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody AtividadeAgendada atividadeAgendada) {
 		atividadeAgendada = service.insert(atividadeAgendada);
@@ -51,21 +67,5 @@ public class AtividadeAgendadaResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.deleteById(id);
 		return ResponseEntity.noContent().build();
-	}
-	
-	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<AtividadeAgendada>> findAll() {
-		List<AtividadeAgendada> lista = service.findAll();
-		return ResponseEntity.ok().body(lista);
-	}
-	
-	@RequestMapping(value="/page", method=RequestMethod.GET)
-	public ResponseEntity<Page<AtividadeAgendada>> findPage(
-			@RequestParam(value="page", defaultValue="0") Integer page,
-			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage,
-			@RequestParam(value="orderBy", defaultValue="id") String orderBy,
-			@RequestParam(value="direction", defaultValue="ASC") String direction) {
-		Page<AtividadeAgendada> pagina = service.findPage(page, linesPerPage, orderBy, direction);
-		return ResponseEntity.ok().body(pagina);
 	}
 }
